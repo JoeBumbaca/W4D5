@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
 
+
   it { should validate_presence_of(:username) }
   it { should validate_presence_of(:password_digest) }
   it { should validate_uniqueness_of(:username) }
-  subject(:fred) { User.create(
+  subject(:fred) { User.create!(
       username: 'fred', 
       password: 'password'
     ) 
@@ -16,20 +17,22 @@ RSpec.describe User, type: :model do
   end
 
   describe "self.find_by_credentials" do 
-    before (:each) do  
-      FactoryBot.create(:bob)
-    end
-
+    
     context "with valid credentials" do 
       it "should find the correct user" do
-        bob = User.find_by_credentials(username: 'Bob', password: 'password123')
-        expect(bob.username).to eq(User.last.username)
+        User.create!(username: "Bob", password: 'password123')
+        # FactoryBot.create(:bob)
+        #debugger
+        result = User.find_by_credentials('Bob','password123')
+        expect(result.username).to eq('Bob')
       end
     end
 
     context "with invalid credentials" do 
       it "should return nil" do
-        invalid_user = User.find_by_credentials(username: 'Steve', password: 'password123')
+        # FactoryBot.create(:bob)
+        User.create!(username: "Bob", password: 'password123')
+        invalid_user = User.find_by_credentials('Steve', 'password123')
         expect(invalid_user).to be nil
       end
     end
