@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  helper_method :current_user, :logged_in?
 
   def login!(user)
     # generate new session token and assign it to the cookie!
